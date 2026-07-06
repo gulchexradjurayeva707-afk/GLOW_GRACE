@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLOW & GRACE - Rasmiy Sayti</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .hidden-panel { display: none; }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-800">
+
+    <!-- HEADER -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <!-- Sirli tugma: 3 marta ketma-ket bossangiz admin oyna ochiladi -->
+            <h1 id="logo-trigger" class="text-2xl font-bold tracking-widest text-pink-600 cursor-pointer select-none">
+                GLOW & GRACE
+            </h1>
+            <nav class="space-x-6">
+                <a href="#catalog-book-section" class="hover:text-pink-600 transition font-medium">Katalog Kitobi</a>
+                <a href="#shop" class="hover:text-pink-600 transition font-medium">Do'kon</a>
+                <span id="user-status" class="text-sm bg-gray-100 px-3 py-1 rounded-full text-gray-600">Mehmon</span>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="container mx-auto px-4 py-8">
+
+        <!-- 1. MIJOZ RO'YXATDAN O'TISHI -->
+        <section id="auth-section" class="max-w-md mx-auto bg-white p-6 rounded-2xl shadow-lg mb-12">
+            <h2 class="text-xl font-semibold mb-4 text-center text-gray-700">Mijoz Ro'yxatdan O'tishi</h2>
+            <form id="reg-form" onsubmit="registerUser(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">Ism va Familiyangiz</label>
+                    <input type="text" id="fullname" required placeholder="Umidjon Axmadov" class="w-full mt-1 p-2.5 border rounded-lg outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">Pasport (Masalan: AA1234567)</label>
+                    <input type="text" id="passport" required placeholder="AA1234567" class="w-full mt-1 p-2.5 border rounded-lg outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">Yashash hududi</label>
+                    <input type="text" id="region" required placeholder="Toshkent sh., Chilonzor" class="w-full mt-1 p-2.5 border rounded-lg outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">Telefon raqami</label>
+                    <input type="tel" id="phone" required placeholder="+998901234567" class="w-full mt-1 p-2.5 border rounded-lg outline-none">
+                </div>
+                <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white py-2.5 rounded-lg font-semibold transition shadow-md">
+                    Ro'yxatdan o'tish
+                </button>
+            </form>
+        </section>
+
+        <!-- MAHSULOTLAR KITOBI -->
+        <section id="catalog-book-section" class="max-w-4xl mx-auto bg-gradient-to-r from-pink-50 to-purple-50 p-6 rounded-2xl border border-pink-200 shadow-sm mb-12 text-center">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2"><i class="fa-solid fa-book-open text-pink-600 mr-2"></i> GLOW & GRACE — Mahsulotlar Kitobi (Katalog)</h2>
+            <div id="catalog-book-display" class="flex flex-col items-center justify-center min-h-32 bg-white rounded-xl p-4 border shadow-inner">
+                <p class="text-gray-400">Hozircha katalog kitobi yuklanmagan.</p>
+            </div>
+        </section>
+
+        <!-- 2. DO'KON VA TOVAR TURLARI -->
+        <section id="shop" class="mb-12">
+            <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">Bizning Mahsulotlar</h2>
+            
+            <!-- Tovar turlari bo'yicha saralash tugmalari -->
+            <div class="flex flex-wrap justify-center gap-2 mb-8">
+                <button onclick="filterCategory('all')" class="bg-pink-600 text-white px-4 py-2 rounded-full text-sm font-medium cursor-pointer shadow-sm">Barchasi</button>
+                <button onclick="filterCategory('Kiyimlar')" class="bg-white hover:bg-pink-50 text-gray-700 border px-4 py-2 rounded-full text-sm font-medium cursor-pointer">Kiyimlar</button>
+                <button onclick="filterCategory('Koftalar')" class="bg-white hover:bg-pink-50 text-gray-700 border px-4 py-2 rounded-full text-sm font-medium cursor-pointer">Koftalar</button>
+                <button onclick="filterCategory('Oyoq kiyimlar')" class="bg-white hover:bg-pink-50 text-gray-700 border px-4 py-2 rounded-full text-sm font-medium cursor-pointer">Oyoq kiyimlar</button>
+                <button onclick="filterCategory('Aksessuarlar')" class="bg-white hover:bg-pink-50 text-gray-700 border px-4 py-2 rounded-full text-sm font-medium cursor-pointer">Aksessuarlar</button>
+                <button onclick="filterCategory('Noodatiy tovarlar')" class="bg-white hover:bg-pink-50 text-gray-700 border px-4 py-2 rounded-full text-sm font-medium cursor-pointer">Noodatiy tovarlar</button>
+            </div>
+
+            <div id="products-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Dinamik mahsulotlar shu yerga keladi -->
+            </div>
+        </section>
+
+        <!-- 3. ADMIN BILAN CHAT -->
+        <section id="chat-box" class="max-w-lg mx-auto bg-white rounded-xl shadow-md overflow-hidden hidden-panel border border-gray-200 mb-12">
+            <div class="bg-pink-600 p-4 text-white font-semibold">
+                <span><i class="fa-solid fa-comments mr-2"></i> Admin bilan bog'lanish</span>
+            </div>
+            <div id="chat-messages" class="h-64 p-4 overflow-y-auto space-y-3 bg-gray-50"></div>
+            <div class="p-3 border-t flex gap-2">
+                <input type="text" id="chat-input" placeholder="Xabarni yozing..." class="flex-1 border p-2 rounded-lg outline-none text-sm">
+                <button onclick="sendChatMessage('customer')" class="bg-pink-600 text-white px-4 py-2 rounded-lg text-sm"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </section>
+
+        <!-- 4. SECRET ADMIN LOGIN MODAL -->
+        <div id="admin-login-modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+            <div class="bg-white p-6 rounded-2xl shadow-xl w-80">
+                <h3 class="text-lg font-bold mb-4 text-center">Admin Tizimiga Kirish</h3>
+                <div class="space-y-3">
+                    <input type="text" id="admin-user" placeholder="Login" class="w-full p-2 border rounded-lg outline-none">
+                    <input type="password" id="admin-pass" placeholder="Parol" class="w-full p-2 border rounded-lg outline-none">
+                    <div class="flex gap-2">
+                        <button onclick="attemptAdminLogin()" class="flex-1 bg-green-600 text-white py-2 rounded-lg font-medium">Kirish</button>
+                        <button onclick="closeAdminModal()" class="flex-1 bg-gray-300 text-gray-700 py-2 rounded-lg font-medium">Yopish</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. ADMIN PANEL -->
+        <section id="admin-panel" class="hidden-panel bg-white p-6 rounded-2xl shadow-xl border-2 border-green-500 mt-8">
+            <div class="flex justify-between items-center mb-6 border-b pb-4">
+                <h2 class="text-2xl font-bold text-green-700"><i class="fa-solid fa-gauge"></i> GLOW & GRACE - Admin Boshqaruvi</h2>
+                <button onclick="logoutAdmin()" class="bg-red-500 text-white px-4 py-1.5 rounded-lg text-sm font-medium">Yopish</button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="space-y-6">
+                    <!-- A. PROMO KOD QO'SHISH BO'LIMI -->
+                    <div class="bg-purple-50 p-4 rounded-xl border border-purple-300">
+                        <h3 class="text-lg font-semibold mb-2 text-purple-800"><i class="fa-solid fa-ticket"></i> Yangi Promo-kod Yaratish</h3>
+                        <div class="space-y-3">
+                            <input type="text" id="promo-code-input" placeholder="Kodni yozing (Masalan: SUPERKOD)" class="w-full p-2 border rounded-lg bg-white uppercase text-sm">
+                            <input type="text" id="promo-discount-input" placeholder="Chegirma miqdori (Masalan: 15 000 so'm)" class="w-full p-2 border rounded-lg bg-white text-sm">
+                            <button onclick="addPromoCode()" class="w-full bg-purple-600 text-white py-2 rounded-lg text-sm font-medium">Promo-kodni Aktivlashtirish</button>
+                        </div>
+                        <div class="mt-4">
+                            <h4 class="text-xs font-bold text-gray-500 uppercase">Hozirgi Aktiv Kodlar:</h4>
+                            <ul id="active-promos-list" class="text-xs text-purple-900 mt-1 list-disc pl-4 space-y-1"></ul>
+                        </div>
+                    </div>
+
+                    <!-- B. KATALOG KITOBINI YANGILASH -->
+                    <div class="bg-gray-50 p-4 rounded-xl border border-blue-300">
+                        <h3 class="text-lg font-semibold mb-2 text-blue-700"><i class="fa-solid fa-book"></i> Katalog Kitobini Yangilash</h3>
+                        <input type="text" id="catalog-book-url" placeholder="Kitob rasm URL manzili" class="w-full p-2 border rounded-lg bg-white text-sm mb-2">
+                        <input type="text" id="catalog-book-link" placeholder="To'liq kitob havolasi (Telegram/Drive link)" class="w-full p-2 border rounded-lg bg-white text-sm mb-2">
+                        <button onclick="updateCatalogBook()" class="w-full bg-blue-600 text-white py-2 rounded-lg text-sm font-medium">Kitobni Saytga Joylash</button>
+                    </div>
+
+                    <!-- C. YANGI MAHSULOT QO'SHISH -->
+                    <div class="bg-gray-50 p-4 rounded-xl border">
+                        <h3 class="text-lg font-semibold mb-3 text-gray-700">Yangi Mahsulot Qo'shish</h3>
+                        <div class="space-y-3">
+                            <select id="p-category" class="w-full p-2 border rounded-lg bg-white">
+                                <option value="Kiyimlar">Kiyimlar</option>
+                                <option value="Koftalar">Koftalar</option>
+                                <option value="Oyoq kiyimlar">Oyoq kiyimlar</option>
+                                <option value="Aksessuarlar">Aksessuarlar</option>
+                                <option value="Noodatiy tovarlar">Noodatiy tovarlar</option>
+                            </select>
+                            <input type="text" id="p-name" placeholder="Mahsulot nomi" class="w-full p-2 border rounded-lg bg-white">
+                            <textarea id="p-desc" placeholder="Tavsifi" class="w-full p-2 border rounded-lg bg-white"></textarea>
+                            <input type="text" id="p-price" placeholder="Narxi (Masalan: 120 000 so'm)" class="w-full p-2 border rounded-lg bg-white">
+                            <input type="text" id="p-img" placeholder="Rasm URL manzili" class="w-full p-2 border rounded-lg bg-white">
+                            <button onclick="addProduct()" class="w-full bg-green-600 text-white py-2 rounded-lg font-semibold">Saytga Joylash</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mijozlar Ro'yxati va Chat -->
+                <div class="bg-gray-50 p-4 rounded-xl border">
+                    <h3 class="text-lg font-semibold mb-3 text-gray-700">Ro'yxatdan O'tgan Mijozlar</h3>
+                    <div class="overflow-x-auto max-h-48 overflow-y-auto mb-4 border rounded-lg bg-white">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="p-2">Ism Familiya</th>
+                                    <th class="p-2">Pasport</th>
+                                    <th class="p-2">Hudud</th>
+                                    <th class="p-2">Telefon</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customers-list"></tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="mt-6 pt-4 border-t">
+                        <h4 class="font-semibold text-sm mb-2">Mijoz bilan chat:</h4>
+                        <div id="admin-chat-messages" class="h-40 bg-white p-2 border rounded mb-2 overflow-y-auto text-xs space-y-2"></div>
+                        <div class="flex gap-2">
+                            <input type="text" id="admin-chat-input" placeholder="Mijozga javob..." class="flex-1 p-2 border rounded text-xs">
+                            <button onclick="sendChatMessage('admin')" class="bg-green-600 text-white px-3 py-1 rounded text-xs">Yuborish</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- SCRIPT LOGIC -->
+    <script>
+        let clickCount = 0;
+        let isRegistered = false;
+        let currentCustomer = null;
+        let currentCategoryFilter = 'all';
+        
+        const ADMIN_TELEGRAM_USERNAME = "umidjon_2014_12"; 
+
+        // Promo-kodlar bazasi
+        let promoCodes = JSON.parse(localStorage.getItem('promoCodes')) || {};
+        let appliedPromos = {}; 
+
+        let catalogBook = JSON.parse(localStorage.getItem('catalogBook')) || {
+            img: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=800",
+            link: "#"
+        };
+
+        let products = JSON.parse(localStorage.getItem('products')) || [
+            {
+                id: "prod_1",
+                category: "Koftalar",
+                name: "Elegant Bahoriy Kofta",
+                desc: "Glow & Grace kolleksiyasidan juda chiroyli va qulay sifatli kofta.",
+                price: "180 000 so'm",
+                img: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500"
+            }
+        ];
+
+        let customers = JSON.parse(localStorage.getItem('customers')) || [];
+
+        window.onload = function() {
+            displayCatalogBook();
+            renderProducts();
+            renderActivePromos();
+            setupSecretTrigger();
+        };
+
+        function setupSecretTrigger() {
+            document.getElementById('logo-trigger').addEventListener('click', () => {
+                clickCount++;
+                if (clickCount === 3) {
+                    clickCount = 0;
+                    document.getElementById('admin-login-modal').style.display = 'flex';
+                }
+            });
+        }
+
+        function closeAdminModal() { document.getElementById('admin-login-modal').style.display = 'none'; }
+
+        function attemptAdminLogin() {
+            const u = document.getElementById('admin-user').value;
+            const p = document.getElementById('admin-pass').value;
+            if (u === 'market' && p === '201425') {
+                closeAdminModal();
+                document.getElementById('admin-panel').classList.remove('hidden-panel');
+                renderCustomers();
+                renderActivePromos();
+                document.getElementById('catalog-book-url').value = catalogBook.img;
+                document.getElementById('catalog-book-link').value = catalogBook.link;
+                window.scrollTo({ top: document.getElementById('admin-panel').offsetTop, behavior: 'smooth' });
+            } else {
+                alert("Xato login yoki parol!");
+            }
+        }
+
+        function logoutAdmin() { document.getElementById('admin-panel').classList.add('hidden-panel'); }
+
+        // --- PROMO KOD QO'SHISH ---
+        function addPromoCode() {
+            const code = document.getElementById('promo-code-input').value.trim().toUpperCase();
+            const discount = document.getElementById('promo-discount-input').value.trim();
+
+            if(!code || !discount) {
+                alert("Iltimos, kod nomi va chegirma miqdorini kiriting!");
+                return;
+            }
+
+            promoCodes[code] = discount;
+            localStorage.setItem('promoCodes', JSON.stringify(promoCodes));
+            renderActivePromos();
+            
+            document.getElementById('promo-code-input').value = '';
+            document.getElementById('promo-discount-input').value = '';
+            alert(`Promo-kod [ ${code} ] muvaffaqiyatli qo'shildi!`);
+        }
+
+        function renderActivePromos() {
+            const list = document.getElementById('active-promos-list');
+            if(!list) return;
+            list.innerHTML = '';
+            for (let code in promoCodes) {
+                list.innerHTML += `<li><strong>${code}</strong> - (${promoCodes[code]} chegirma)</li>`;
+            }
+        }
+
+        // --- PROMO KODNI TEKSHIRISH ---
+        function checkPromoCode(productId) {
+            const inputVal = document.getElementById(`promo-input-${productId}`).value.trim().toUpperCase();
+            const statusLabel = document.getElementById(`promo-status-${productId}`);
+
+            if(!inputVal) {
+                statusLabel.innerText = "Kodni yozing!";
+                statusLabel.className = "text-xs text-amber-600 mt-1 font-medium";
+                return;
+            }
+
+            if (promoCodes[inputVal]) {
+                appliedPromos[productId] = { code: inputVal, discount: promoCodes[inputVal] };
+                statusLabel.innerText = `Aktiv: -${promoCodes[inputVal]} chegirma!`;
+                statusLabel.className = "text-xs text-green-600 mt-1 font-bold animate-bounce";
+            } else {
+                delete appliedPromos[productId];
+                statusLabel.innerText = "Xato: Noto'g'ri promo-kod!";
+                statusLabel.className = "text-xs text-red-600 mt-1 font-bold";
+            }
+        }
+
+        // --- KATEGORIYA FILTRI ---
+        function filterCategory(cat) {
+            currentCategoryFilter = cat;
+            renderProducts();
+            
+            const buttons = document.querySelectorAll('#shop button');
+            buttons.forEach(btn => {
+                if(btn.getAttribute('onclick').includes(`'${cat}'`)) {
+                    btn.className = "bg-pink-600 text-white px-4 py-2 rounded-full text-sm font-medium cursor-pointer shadow-sm";
+                } else {
+                    btn.className = "bg-white hover:bg-pink-50 text-gray-700 border px-4 py-2 rounded-full text-sm font-medium cursor-pointer";
+                }
+            });
+        }
+
+        // --- KATALOG FUNKSIYALARI ---
+        function updateCatalogBook() {
+            const imgUrl = document.getElementById('catalog-book-url').value.trim();
+            const bookLink = document.getElementById('catalog-book-link').value.trim();
+            if(!imgUrl) return alert("Rasm URL kiriting!");
+            catalogBook = { img: imgUrl, link: bookLink || "#" };
+            localStorage.setItem('catalogBook', JSON.stringify(catalogBook));
+            displayCatalogBook();
+            alert("Katalog yangilandi!");
+        }
+
+        function displayCatalogBook() {
+            const displayDiv = document.getElementById('catalog-book-display');
+            if(catalogBook && catalogBook.img) {
+                displayDiv.innerHTML = `
+                    <div class="max-w-xs bg-white p-2 rounded-xl shadow-md border mb-3">
+                        <img src="${catalogBook.img}" class="w-full h-48 object-cover rounded-lg">
+                    </div>
+                    <a href="${catalogBook.link}" target="_blank" class="bg-pink-600 hover:bg-pink-700 text-white px-5 py-2 rounded-full font-semibold text-xs shadow-md"><i class="fa-solid fa-download"></i> Kitobni Ko'rish / Yuklab Olish</a>
+                `;
+            }
+        }
+
+        // --- MIJOZNI RO'YXATDAN O'TKAZISH ---
+        function registerUser(e) {
+            e.preventDefault();
+            const fullname = document.getElementById('fullname').value.trim();
+            const passport = document.getElementById('passport').value.trim();
+            const region = document.getElementById('region').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+
+            currentCustomer = { fullname, passport, region, phone };
+            customers.push(currentCustomer);
+            localStorage.setItem('customers', JSON.stringify(customers));
+
+            isRegistered = true;
+            document.getElementById('auth-section').classList.add('hidden-panel');
+            document.getElementById('chat-box').classList.remove('hidden-panel');
+            document.getElementById('user-status').innerText = "Tasdiqlangan mijoz";
+            document.getElementById('user-status').className = "text-sm bg-green-100 px-3 py-1 rounded-full text-green-700";
+            alert("Muvaffaqiyatli ro'yxatdan o'tdingiz!");
+        }
+
+        // --- MAHSULOTLARNI RO'YXATGA CHIQARISH ---
+        function renderProducts() {
+            const grid = document.getElementById('products-grid');
+            grid.innerHTML = '';
+
+            const filtered = products.filter(p => currentCategoryFilter === 'all' || p.category === currentCategoryFilter);
+
+            if(filtered.length === 0) {
+                grid.innerHTML = `<p class="text-gray-400 text-center col-span-3 py-8">Bu bo'limda hozircha mahsulot yo'q.</p>`;
+                return;
+            }
+
+            filtered.forEach((p) => {
+                grid.innerHTML += `
+                    <div class="bg-white p-5 rounded-2xl shadow-md border border-gray-100 flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-pink-500 bg-pink-50 px-2 py-1 rounded uppercase tracking-wider">${p.category}</span>
+                            <img src="${p.img}" alt="${p.name}" class="w-full h-52 object-cover rounded-lg mt-2 mb-4">
+                            <h3 class="text-lg font-bold text-gray-800">${p.name}</h3>
+                            <p class="text-sm text-gray-500 mb-4">${p.desc}</p>
+                        </div>
+                        <div>
+                            <div class="text-xl font-bold text-pink-600 mb-3">${p.price}</div>
+                            
+                            <!-- PROMO KOD OYNASI -->
+                            <div class="border-t pt-3 mt-2 mb-3">
+                                <label class="block text-xs font-medium text-gray-500 mb-1">Promo-kod bormi?</label>
+                                <div class="flex gap-1">
+                                    <input type="text" id="promo-input-${p.id}" placeholder="KODNI YOZING" class="flex-1 text-xs border p-1.5 rounded outline-none uppercase font-mono">
+                                    <button onclick="checkPromoCode('${p.id}')" class="bg-gray-800 text-white text-xs px-3 py-1.5 rounded font-medium cursor-pointer">Tekshirish</button>
+                                </div>
+                                <div id="promo-status-${p.id}" class="text-xs text-gray-400 mt-1 font-medium">Promo-kod kiritilmagan</div>
+                            </div>
+
+                            <!-- SOTIB OLISH TUGMASI (AYNAN SEN XO'XHLAGAN TEXT FORMATI BILAN) -->
+                            <button onclick="buyProduct('${p.id}', '${p.name}', '${p.price}', '${p.img}')" class="w-full bg-pink-600 hover:bg-pink-700 text-white py-2 rounded-xl font-medium transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-cart-shopping"></i> Sotib olish
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function addProduct() {
+            const category = document.getElementById('p-category').value;
+            const name = document.getElementById('p-name').value.trim();
+            const desc = document.getElementById('p-desc').value.trim();
+            const price = document.getElementById('p-price').value.trim();
+            const img = document.getElementById('p-img').value.trim() || "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=500";
+
+            if(!name || !desc || !price) return alert("Barcha maydonlarni to'ldiring!");
+
+            const newId = "prod_" + Date.now();
+            products.push({ id: newId, category, name, desc, price, img });
+            localStorage.setItem('products', JSON.stringify(products));
+            renderProducts();
+            
+            document.getElementById('p-name').value = '';
+            document.getElementById('p-desc').value = '';
+            document.getElementById('p-price').value = '';
+            document.getElementById('p-img').value = '';
+            alert("Mahsulot qo'shildi!");
+        }
+
+        // --- TELEGRAMGA MAXSUS FORMATDA XABAR YUBORISH FUNKSIYASI ---
+        function buyProduct(productId, productName, productPrice, productImg) {
+            // Agar mijoz hali ro'yxatdan o'tmagan bo'lsa "Kiritilmagan" yozuvi boradi
+            const xaridorIsmi = currentCustomer ? currentCustomer.fullname : "Kiritilmagan";
+            const xaridorHudud = currentCustomer ? currentCustomer.region : "Kiritilmagan";
+            const xaridorTelefon = currentCustomer ? currentCustomer.phone : "Kiritilmagan";
+
+            let promoText = "Yo'q";
+            if (appliedPromos[productId]) {
+                promoText = `${appliedPromos[productId].code} (-${appliedPromos[productId].discount} chegirma)`;
+            }
+
+            // Sening talabing bo'yicha tayyorlangan xabar formati
+            const message = `ASSALOMU ALAYKUM! MEN MANASHU MAHSULOTNI SOTIB OLMOQCHIMAN\n\n` +
+                            `📦 Mahsulot nomi: ${productName}\n` +
+                            `💰 Narxi: ${productPrice}\n` +
+                            `🎟 Ishlatilgan Promo-kod: ${promoText}\n` +
+                            `👤 Xaridor ismi va familiyasi: ${xaridorIsmi}\n` +
+                            `📍 Hududi: ${xaridorHudud}\n` +
+                            `📞 Telefon raqami: ${xaridorTelefon}\n` +
+                            `🔗 Mahsulot havolasi va rasmi: ${productImg}`;
+
+            // Telegram ilovasini srazi ochish
+            window.open(`https://t.me/${ADMIN_TELEGRAM_USERNAME}?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        // CHAT LOGIKASI
+        function sendChatMessage(sender) {
+            let inputId = sender === 'customer' ? 'chat-input' : 'admin-chat-input';
+            let msgText = document.getElementById(inputId).value.trim();
+            if(!msgText) return;
+            let msgHTML = `<div class="${sender === 'customer' ? 'text-right' : 'text-left'}"><span class="${sender === 'customer' ? 'bg-pink-600 text-white' : 'bg-gray-200 text-gray-800'} px-3 py-1.5 rounded-lg inline-block text-sm">${msgText}</span></div>`;
+            document.getElementById('chat-messages').innerHTML += msgHTML;
+            document.getElementById('admin-chat-messages').innerHTML += msgHTML;
+            document.getElementById(inputId).value = '';
+        }
+
+        function renderCustomers() {
+            const list = document.getElementById('customers-list');
+            list.innerHTML = '';
+            customers.forEach(c => {
+                list.innerHTML += `<tr class="border-b"><td class="p-2 font-medium">${c.fullname}</td><td class="p-2 font-mono">${c.passport}</td><td class="p-2">${c.region}</td><td class="p-2">${c.phone}</td></tr>`;
+            });
+        }
+    </script>
+</body>
+</html>
