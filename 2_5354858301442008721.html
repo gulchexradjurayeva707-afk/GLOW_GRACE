@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLOW & GRACE - Rasmiy Sayti</title>
+    <!-- Tailwind CSS for Beautiful Styling -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .hidden-panel { display: none; }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-800">
+
+    <!-- HEADER -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <!-- Sirli tugma: Logotipni 3 marta ketma-ket bossangiz admin oyna ochiladi -->
+            <h1 id="logo-trigger" class="text-2xl font-bold tracking-widest text-pink-600 cursor-pointer select-none">
+                GLOW & GRACE
+            </h1>
+            <nav class="space-x-6">
+                <a href="#catalog-book-section" class="hover:text-pink-600 transition font-medium">Mahsulotlar Kitobi</a>
+                <a href="#shop" class="hover:text-pink-600 transition font-medium">Do'kon</a>
+                <span id="user-status" class="text-sm bg-gray-100 px-3 py-1 rounded-full text-gray-600">Mehmon</span>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="container mx-auto px-4 py-8">
+
+        <!-- 1. REGISTRATION FORM (MIJOZ RO'YXATDAN O'TISHI) -->
+        <section id="auth-section" class="max-w-md mx-auto bg-white p-6 rounded-2xl shadow-lg mb-12">
+            <h2 class="text-xl font-semibold mb-4 text-center text-gray-700">Mijoz Ro'yxatdan O'tishi</h2>
+            <p class="text-xs text-red-500 mb-4 text-center">* Barcha ma'lumotlarni to'g'ri kiritish majburiy!</p>
+            
+            <form id="reg-form" onsubmit="registerUser(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">Pasport ma'lumotlari (Masalan: AA1234567)</label>
+                    <input type="text" id="passport" required placeholder="AA1234567" 
+                           class="w-full mt-1 p-2.5 border rounded-lg focus:ring-2 focus:ring-pink-400 outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">Yashash hududi (Viloyat/Tuman)</label>
+                    <input type="text" id="region" required placeholder="Toshkent sh., Chilonzor" 
+                           class="w-full mt-1 p-2.5 border rounded-lg focus:ring-2 focus:ring-pink-400 outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">Telefon raqami</label>
+                    <input type="tel" id="phone" required placeholder="+998901234567" 
+                           class="w-full mt-1 p-2.5 border rounded-lg focus:ring-2 focus:ring-pink-400 outline-none">
+                </div>
+                <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white py-2.5 rounded-lg font-semibold transition shadow-md">
+                    Ro'yxatdan o'tish
+                </button>
+            </form>
+        </section>
+
+        <!-- MAHSULOTLAR KITOBI (KATALOG) KO'RISH BO'LIMI -->
+        <section id="catalog-book-section" class="max-w-4xl mx-auto bg-gradient-to-r from-pink-50 to-purple-50 p-6 rounded-2xl border border-pink-200 shadow-sm mb-12 text-center">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2"><i class="fa-solid fa-book-open text-pink-600 mr-2"></i> GLOW & GRACE — Mahsulotlar Kitobi (Katalog)</h2>
+            <p class="text-sm text-gray-600 mb-6">Admin tomonidan yuklangan eng so'nggi go'zallik va parvarish kitobimiz</p>
+            
+            <div id="catalog-book-display" class="flex flex-col items-center justify-center min-h-64 bg-white rounded-xl p-4 border shadow-inner">
+                <!-- Dinamik ravishda yuklangan kitob/katalog rasmi yoki havolasi chiqadi -->
+                <p class="text-gray-400">Hozircha katalog kitobi yuklanmagan.</p>
+            </div>
+        </section>
+
+        <!-- 2. SHOP / MAHSULOTLAR GALEREYASI -->
+        <section id="shop" class="mb-12">
+            <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">Bizning Mahsulotlar</h2>
+            <div id="products-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Dinamik mahsulotlar shu yerga keladi -->
+            </div>
+        </section>
+
+        <!-- 3. CHAT WITH ADMIN (MIJOZ VA ADMIN SUHBATI) -->
+        <section id="chat-box" class="max-w-lg mx-auto bg-white rounded-xl shadow-md overflow-hidden hidden-panel border border-gray-200 mb-12">
+            <div class="bg-pink-600 p-4 text-white font-semibold flex items-center justify-between">
+                <span><i class="fa-solid fa-comments mr-2"></i> Admin bilan bog'lanish</span>
+            </div>
+            <div id="chat-messages" class="h-64 p-4 overflow-y-auto space-y-3 bg-gray-50">
+                <div class="text-left"><span class="bg-gray-200 text-gray-800 px-3 py-1.5 rounded-lg inline-block text-sm">Assalomu alaykum! Savollaringiz bo'lsa yozing.</span></div>
+            </div>
+            <div class="p-3 border-t flex gap-2">
+                <input type="text" id="chat-input" placeholder="Xabarni yozing..." class="flex-1 border p-2 rounded-lg outline-none text-sm">
+                <button onclick="sendChatMessage('customer')" class="bg-pink-600 text-white px-4 py-2 rounded-lg text-sm font-medium"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </section>
+
+        <!-- 4. SECRET ADMIN LOGIN MODAL -->
+        <div id="admin-login-modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+            <div class="bg-white p-6 rounded-2xl shadow-xl w-80">
+                <h3 class="text-lg font-bold mb-4 text-center">Admin Tizimiga Kirish</h3>
+                <div class="space-y-3">
+                    <input type="text" id="admin-user" placeholder="Login" class="w-full p-2 border rounded-lg outline-none">
+                    <input type="password" id="admin-pass" placeholder="Parol" class="w-full p-2 border rounded-lg outline-none">
+                    <div class="flex gap-2">
+                        <button onclick="attemptAdminLogin()" class="flex-1 bg-green-600 text-white py-2 rounded-lg font-medium">Kirish</button>
+                        <button onclick="closeAdminModal()" class="flex-1 bg-gray-300 text-gray-700 py-2 rounded-lg font-medium">Yopish</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. ADMIN PANEL (YASHIRIN) -->
+        <section id="admin-panel" class="hidden-panel bg-white p-6 rounded-2xl shadow-xl border-2 border-green-500 mt-8">
+            <div class="flex justify-between items-center mb-6 border-b pb-4">
+                <h2 class="text-2xl font-bold text-green-700"><i class="fa-solid fa-gauge"></i> GLOW & GRACE - Admin Panel</h2>
+                <button onclick="logoutAdmin()" class="bg-red-500 text-white px-4 py-1.5 rounded-lg text-sm font-medium">Panelni Yopish</button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Admin kiritish bo'limlari -->
+                <div class="space-y-6">
+                    <!-- 1. Mahsulotlar kitobini (Katalogni) yuklash -->
+                    <div class="bg-gray-50 p-4 rounded-xl border border-blue-300">
+                        <h3 class="text-lg font-semibold mb-2 text-blue-700"><i class="fa-solid fa-book animate-pulse"></i> Mahsulotlar Kitobini (Katalogni) Yangilash</h3>
+                        <p class="text-xs text-gray-500 mb-3">Kitob muqovasi yoki jurnal sahifasining rasm URL manzilini kiriting.</p>
+                        <div class="space-y-3">
+                            <input type="text" id="catalog-book-url" placeholder="Kitob rasm URL manzili" class="w-full p-2 border rounded-lg bg-white text-sm">
+                            <input type="text" id="catalog-book-link" placeholder="To'liq kitob havolasi (Masalan: Telegram kanal yoki Google Drive linki)" class="w-full p-2 border rounded-lg bg-white text-sm">
+                            <button onclick="updateCatalogBook()" class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium text-sm">Kitobni Saytga Joylash</button>
+                        </div>
+                    </div>
+
+                    <!-- 2. Yangi mahsulot joylash -->
+                    <div class="bg-gray-50 p-4 rounded-xl border">
+                        <h3 class="text-lg font-semibold mb-3 text-gray-700">Yangi Mahsulot Joylash</h3>
+                        <div class="space-y-3">
+                            <input type="text" id="p-name" placeholder="Mahsulot nomi" class="w-full p-2 border rounded-lg bg-white">
+                            <textarea id="p-desc" placeholder="Tavsifi" class="w-full p-2 border rounded-lg bg-white"></textarea>
+                            <input type="text" id="p-price" placeholder="Narxi (Masalan: 120 000 so'm)" class="w-full p-2 border rounded-lg bg-white">
+                            <input type="text" id="p-img" placeholder="Rasm URL manzili" class="w-full p-2 border rounded-lg bg-white">
+                            <input type="text" id="p-vid" placeholder="Video URL manzili (ixtiyoriy)" class="w-full p-2 border rounded-lg bg-white">
+                            <button onclick="addProduct()" class="w-full bg-green-600 text-white py-2 rounded-lg font-semibold">Saytga Joylash</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mijozlar Ro'yxati va Chat -->
+                <div class="bg-gray-50 p-4 rounded-xl border">
+                    <h3 class="text-lg font-semibold mb-3 text-gray-700">Barcha Ro'yxatdan O'tgan Mijozlar</h3>
+                    <div class="overflow-x-auto max-h-48 overflow-y-auto mb-4">
+                        <table class="w-full text-left text-sm">
+                            <thead class="sticky top-0 bg-gray-200">
+                                <tr>
+                                    <th class="p-2">Pasport</th>
+                                    <th class="p-2">Hudud</th>
+                                    <th class="p-2">Telefon</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customers-list">
+                                <!-- Dinamik mijozlar ro'yxati -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Admin Chat Response Area -->
+                    <div class="mt-6 pt-4 border-t">
+                        <h4 class="font-semibold text-sm mb-2">Mijoz bilan chat:</h4>
+                        <div id="admin-chat-messages" class="h-32 bg-white p-2 border rounded mb-2 overflow-y-auto text-xs space-y-2"></div>
+                        <div class="flex gap-2">
+                            <input type="text" id="admin-chat-input" placeholder="Mijozga javob..." class="flex-1 p-2 border rounded text-xs">
+                            <button onclick="sendChatMessage('admin')" class="bg-green-600 text-white px-3 py-1 rounded text-xs font-medium">Yuborish</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- SCRIPT LOGIC -->
+    <script>
+        let clickCount = 0;
+        let isRegistered = false;
+        let currentCustomer = null;
+        
+        const ADMIN_TELEGRAM_USERNAME = "umidjon_2014_12"; 
+
+        // Mahsulotlar kitobi (Katalog) uchun xotira
+        let catalogBook = JSON.parse(localStorage.getItem('catalogBook')) || {
+            img: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=800", // Default chiroyli kitob rasmi
+            link: "#"
+        };
+
+        // Boshlang'ich mahsulotlar ro'yxati
+        let products = JSON.parse(localStorage.getItem('products')) || [
+            {
+                name: "Glow Luxury Krem",
+                desc: "Yuzni mukammal darajada oziqlantiruvchi va yoshartiruvchi maxsus krem.",
+                price: "150 000 so'm",
+                img: "https://images.unsplash.com/photo-1608248597481-496100c8c836?w=500",
+                vid: ""
+            }
+        ];
+
+        let customers = JSON.parse(localStorage.getItem('customers')) || [];
+
+        window.onload = function() {
+            displayCatalogBook();
+            renderProducts();
+            setupSecretTrigger();
+        };
+
+        // Sirli logotip mexanizmi
+        function setupSecretTrigger() {
+            document.getElementById('logo-trigger').addEventListener('click', () => {
+                clickCount++;
+                if (clickCount === 3) {
+                    clickCount = 0;
+                    document.getElementById('admin-login-modal').style.display = 'flex';
+                }
+            });
+        }
+
+        function closeAdminModal() {
+            document.getElementById('admin-login-modal').style.display = 'none';
+        }
+
+        function attemptAdminLogin() {
+            const u = document.getElementById('admin-user').value;
+            const p = document.getElementById('admin-pass').value;
+
+            if (u === 'market' && p === '201425') {
+                closeAdminModal();
+                document.getElementById('admin-panel').classList.remove('hidden-panel');
+                renderCustomers();
+                
+                // Admin panel ochilganda formaga joriy kitob ma'lumotlarini to'ldirib qo'yish
+                document.getElementById('catalog-book-url').value = catalogBook.img;
+                document.getElementById('catalog-book-link').value = catalogBook.link;
+
+                window.scrollTo({ top: document.getElementById('admin-panel').offsetTop, behavior: 'smooth' });
+            } else {
+                alert("Xato login yoki parol!");
+            }
+        }
+
+        function logoutAdmin() {
+            document.getElementById('admin-panel').classList.add('hidden-panel');
+        }
+
+        // --- MAHSULOTLAR KITOBI (KATALOG) FUNKSIYALARI ---
+        function updateCatalogBook() {
+            const imgUrl = document.getElementById('catalog-book-url').value.trim();
+            const bookLink = document.getElementById('catalog-book-link').value.trim();
+
+            if(!imgUrl) {
+                alert("Iltimos, kitob muqovasi rasm manzilini (URL) kiriting!");
+                return;
+            }
+
+            catalogBook = { img: imgUrl, link: bookLink || "#" };
+            localStorage.setItem('catalogBook', JSON.stringify(catalogBook));
+            displayCatalogBook();
+            alert("Mahsulotlar kitobi (Katalog) muvaffaqiyatli yangilandi!");
+        }
+
+        function displayCatalogBook() {
+            const displayDiv = document.getElementById('catalog-book-display');
+            if(catalogBook && catalogBook.img) {
+                displayDiv.innerHTML = `
+                    <div class="max-w-xs bg-white p-2 rounded-xl shadow-md border mb-4">
+                        <img src="${catalogBook.img}" alt="Katalog Kitobi" class="w-full h-64 object-cover rounded-lg">
+                    </div>
+                    <a href="${catalogBook.link}" target="_blank" class="bg-pink-600 hover:bg-pink-700 text-white px-6 py-2.5 rounded-full font-semibold text-sm transition shadow-md flex items-center gap-2">
+                        <i class="fa-solid fa-download"></i> Kitobni To'liq Ko'rish / Yuklab Olish
+                    </a>
+                `;
+            }
+        }
+
+        // --- RO'YXATDAN O'TISH (YUMSHOQ VALIDATSIYA) ---
+        function registerUser(e) {
+            e.preventDefault();
+            const passport = document.getElementById('passport').value.trim();
+            const region = document.getElementById('region').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+
+            if(!passport || !region || !phone) {
+                alert("Iltimos, barcha ma'lumotlarni to'liq kiriting!");
+                return;
+            }
+
+            currentCustomer = { passport, region, phone };
+            customers.push(currentCustomer);
+            localStorage.setItem('customers', JSON.stringify(customers));
+
+            isRegistered = true;
+            document.getElementById('auth-section').classList.add('hidden-panel');
+            document.getElementById('chat-box').classList.remove('hidden-panel');
+            document.getElementById('user-status').innerText = "Tasdiqlangan mijoz";
+            document.getElementById('user-status').classList.replace('bg-gray-100', 'bg-green-100');
+            
+            alert("Muvaffaqiyatli ro'yxatdan o'tdingiz!");
+        }
+
+        // --- MAHSULOTLARNI CHIQARISH ---
+        function renderProducts() {
+            const grid = document.getElementById('products-grid');
+            grid.innerHTML = '';
+
+            products.forEach((p) => {
+                let mediaHTML = `<img src="${p.img}" alt="${p.name}" class="w-full h-56 object-cover rounded-lg mb-4">`;
+                if(p.vid) {
+                    mediaHTML += `<video src="${p.vid}" controls class="w-full h-40 object-cover rounded-lg mb-4 bg-black"></video>`;
+                }
+
+                grid.innerHTML += `
+                    <div class="bg-white p-5 rounded-2xl shadow-md border border-gray-100 flex flex-col justify-between">
+                        <div>
+                            ${mediaHTML}
+                            <h3 class="text-lg font-bold text-gray-800 mt-1 mb-1">${p.name}</h3>
+                            <p class="text-sm text-gray-500 mb-4">${p.desc}</p>
+                        </div>
+                        <div>
+                            <div class="text-xl font-bold text-pink-600 mb-3">${p.price}</div>
+                            <button onclick="buyProduct('${p.name}', '${p.img}')" class="w-full bg-pink-600 hover:bg-pink-700 text-white py-2 rounded-xl font-medium transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-cart-shopping"></i> Sotib olish
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function addProduct() {
+            const name = document.getElementById('p-name').value.trim();
+            const desc = document.getElementById('p-desc').value.trim();
+            const price = document.getElementById('p-price').value.trim();
+            const img = document.getElementById('p-img').value.trim() || "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=500";
+            const vid = document.getElementById('p-vid').value.trim();
+
+            if(!name || !desc || !price) {
+                alert("Nomi, tavsifi va narxini kiritish shart!");
+                return;
+            }
+
+            products.push({ name, desc, price, img, vid });
+            localStorage.setItem('products', JSON.stringify(products));
+            renderProducts();
+            
+            document.getElementById('p-name').value = '';
+            document.getElementById('p-desc').value = '';
+            document.getElementById('p-price').value = '';
+            document.getElementById('p-img').value = '';
+            document.getElementById('p-vid').value = '';
+            alert("Mahsulot muvaffaqiyatli qo'shildi!");
+        }
+
+        // --- SOTIB OLISH (TELEGRAM) ---
+        function buyProduct(productName, productImg) {
+            if (!isRegistered) {
+                alert("Iltimos, avval sahifaning yuqori qismida ro'yxatdan o'ting!");
+                window.scrollTo({ top: document.getElementById('auth-section').offsetTop, behavior: 'smooth' });
+                return;
+            }
+
+            const message = `ASSALOMU ALAYKUM MEN MANASHU MAHSULOTNI SOTIB OLMOQCHIMAN ILTIMOS KARTA RAQAM YUBORING.\n\nMahsulot nomi: ${productName}\nMahsulot rasmi: ${productImg}`;
+            const encodedMessage = encodeURIComponent(message);
+            window.open(`https://t.me/${ADMIN_TELEGRAM_USERNAME}?text=${encodedMessage}`, '_blank');
+        }
+
+        function renderCustomers() {
+            const list = document.getElementById('customers-list');
+            list.innerHTML = '';
+            customers.forEach(c => {
+                list.innerHTML += `
+                    <tr class="border-b bg-white">
+                        <td class="p-2 font-mono">${c.passport}</td>
+                        <td class="p-2">${c.region}</td>
+                        <td class="p-2">${c.phone}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        // --- CHAT TIZIMI ---
+        function sendChatMessage(sender) {
+            let inputId = sender === 'customer' ? 'chat-input' : 'admin-chat-input';
+            let msgText = document.getElementById(inputId).value.trim();
+            
+            if(!msgText) return;
+
+            let msgHTML = `
+                <div class="${sender === 'customer' ? 'text-right' : 'text-left'}">
+                    <span class="${sender === 'customer' ? 'bg-pink-600 text-white' : 'bg-gray-200 text-gray-800'} px-3 py-1.5 rounded-lg inline-block text-sm">
+                        ${msgText}
+                    </span>
+                </div>`;
+
+            document.getElementById('chat-messages').innerHTML += msgHTML;
+            document.getElementById('admin-chat-messages').innerHTML += msgHTML;
+            
+            document.getElementById(inputId).value = '';
+            
+            document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
+            document.getElementById('admin-chat-messages').scrollTop = document.getElementById('admin-chat-messages').scrollHeight;
+        }
+    </script>
+</body>
+</html>
